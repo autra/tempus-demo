@@ -1,0 +1,24 @@
+{
+  "name": "tempus-demo",
+  "version": "0.0.1",
+  "description": "This is a web demo of the capabilities of Tempus",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server -d --inline --hot",
+    "build": "webpack -p"
+  },
+  "keywords": [
+    "tempus",
+    "routing",
+    "gis"
+  ],
+  "author": "The Tempus Team",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "openlayers": "^4.0.1"
+  },
+  "devDependencies": {
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
+  }
+}
