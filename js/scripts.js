@@ -22,6 +22,7 @@ let view = new ol.View({
   extent: [lyonLeft, lyonBottom, lyonRight, lyonTop],
   projection: 'EPSG:4326'
 });
+
 let map = new ol.Map({
   layers: [openLayer],
   target: 'map-container',
@@ -36,7 +37,7 @@ let getItinerary = document.getElementById('get-itinerary');
 let currentPlaceFn;
 
 const itineraryPointSource = new ol.source.Vector({});
-map.addLayer(new ol.layer.Vector({ source: itineraryPointSource}));
+map.addLayer(new ol.layer.Vector({ source: itineraryPointSource }));
 
 let startPoint = new ItineraryPoint(itineraryPointSource, 'A');
 let destPoint = new ItineraryPoint(itineraryPointSource, 'B');
@@ -72,11 +73,27 @@ placeDestination.addEventListener('click', () => {
   currentPlaceFn = placeDestFn;
 });
 
+const itineraryFeatures = new ol.Collection();
+map.addLayer(new ol.layer.Vector({
+  source: new ol.source.Vector({ features: itineraryFeatures }),
+  style: new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'red',
+        width: 2
+      })
+    })
+}));
+
 getItinerary.addEventListener('click', () => {
   // get info and send them to server
-  let startLonLat = startPoint.getCoordinates('EPSG:4326');
-  let destLonLat = destPoint.getCoordinates('EPSG:4326');
-  console.log('querying:', startLonLat, destLonLat);
+  let startLonLat = startPoint.getCoordinates();
+  let destLonLat = destPoint.getCoordinates();
+
+  fetch(`http://localhost:5000/request?start=${startLonLat.join(';')}&dest=${destLonLat.join(';')}`)
+  .then(response => response.json()).then(json => {
+    itineraryFeatures.clear();
+    itineraryFeatures.extend((new ol.format.GeoJSON()).readFeatures(json));
+  });
 });
 
 console.log('loaded');
