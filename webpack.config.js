@@ -1,12 +1,14 @@
 let path = require('path');
 
 module.exports = {
-  entry: [path.resolve(__dirname, 'js/scripts.js') ],
+  entry: {
+    'tempus-osm': [path.resolve(__dirname, 'js/index-osm.js') ],
+  },
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'tempus-demo.js',
-    library: 'tempus-demo',
+    filename: '[name].js',
+    library: '[name]',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
