@@ -3,13 +3,13 @@
 // OSM map
 let ol = require('openlayers');
 let ItineraryPoint = require('./ItineraryPoint');
-// lyon extent in EPSG:3857
-//524252,5728103 : 558211,5754922
-let lyonLeft = 524252;
-let lyonRight = 558211;
-let lyonBottom = 5728103;
-let lyonTop = 5754922;
-var openLayer = new ol.layer.Tile({
+// lyon extent in EPSG:4326
+//4.65,45.62 : 5.09,45.91
+let lyonLeft = 4.65;
+let lyonRight = 5.09;
+let lyonBottom = 45.62;
+let lyonTop = 45.91;
+let openLayer = new ol.layer.Tile({
   source: new ol.source.OSM(),
 });
 
@@ -19,9 +19,10 @@ let view = new ol.View({
   zoom: 4,
   center: center,
   resolution: (lyonRight - lyonLeft) / (256 * 4),
-  extent: [lyonLeft, lyonBottom, lyonRight, lyonTop]
+  extent: [lyonLeft, lyonBottom, lyonRight, lyonTop],
+  projection: 'EPSG:4326'
 });
-var map = new ol.Map({
+let map = new ol.Map({
   layers: [openLayer],
   target: 'map-container',
   view
@@ -49,10 +50,6 @@ function placeFn(point, evt) {
   if (startPoint.getCoordinates() && destPoint.getCoordinates()) {
     getItinerary.disabled = false;
   }
-  // var lonlat = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-  // var lon = lonlat[0];
-  // var lat = lonlat[1];
-  // return [lon, lat];
 }
 
 let placeStartFn = evt => {
